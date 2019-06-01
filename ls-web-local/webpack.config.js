@@ -39,7 +39,7 @@ module.exports = {
       {
 				include: [path.resolve(__dirname, 'node_modules/typescript/lib')],
 				loader: 'raw-loader',
-        test: /lib.*\d.\.ts$/,
+        test: /lib.*\.d\.ts$/,
 			},
 		],
 	},
