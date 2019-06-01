@@ -43,9 +43,9 @@ export class ScriptInfo {
     const p2 = this.svc.lineOffsetToPosition(end.line, end.offset);
     this.svc.edit(p1, p2 - p1, newText);
 
-    const l = this.svc.getSnapshot().getLength();
-    const t = this.svc.getSnapshot().getText(0, l);
-    console.log(l, t);
+    // const l = this.svc.getSnapshot().getLength();
+    // const t = this.svc.getSnapshot().getText(0, l);
+    // console.log(l, t);
 
     this.svcVersion++;
   }
