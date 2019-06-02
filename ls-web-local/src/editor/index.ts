@@ -1,4 +1,5 @@
 import ace, { Ace } from "ace-builds";
+import "ace-builds/webpack-resolver"; // tell theme, syntax highlight module url to webpack
 
 import { Subject, merge } from "rxjs";
 import {
@@ -31,6 +32,10 @@ export function setupEditor(id: string) {
 
   const editor = ace.edit(id);
   const editorSession = editor.getSession();
+
+  editor.setTheme("ace/theme/monokai");
+  editorSession.setMode("ace/mode/typescript");
+  editorSession.setTabSize(2);
   
   const inital$ = new Subject<string>();
   const initalContent = editor.getSession().getDocument().getValue();

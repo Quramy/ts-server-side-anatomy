@@ -31,11 +31,11 @@ export class LanguageServiceSession {
   }
 
   change({fileName, start, end, newText }: ChangeArgs) {
-    this.project.getScriptInfo(fileName).edit(start, end, newText);
+    this.project.getExistingScriptInfo(fileName).edit(start, end, newText);
   }
 
   getErrors({ fileName }: GetErrorsArgs) {
-    const scriptInfo = this.project.getScriptInfo(fileName);
+    const scriptInfo = this.project.getExistingScriptInfo(fileName);
     const syntacticDiagnostics = this.langService.getSyntacticDiagnostics(fileName).map(d => ({
       messageText: d.messageText,
       start: scriptInfo.number2location(d.start),

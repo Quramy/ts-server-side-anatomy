@@ -48,6 +48,10 @@ export class Project implements ts.LanguageServiceHost {
     return this.getOrCreateScriptInfo(fileName);
   }
 
+  getExistingScriptInfo(fileName: string) {
+    return this.getScriptInfoInternal(fileName);
+  }
+
   private getOrCreateScriptInfo(fileName: string) {
     const f = this.fileMap.get(fileName);
     if (f) return f;
