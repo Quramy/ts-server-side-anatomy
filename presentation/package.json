@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "fusuma start",
+    "prebuild": "rimraf dist && gulp",
+    "build": "fusuma build -d fusuma_wd && mv fusuma_wd/dist dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +18,7 @@
     "gulp-replace": "^1.0.0",
     "image-downloader": "^3.4.2",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.4",
+    "rimraf": "^2.6.3"
   }
 }
