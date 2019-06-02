@@ -1,0 +1,4 @@
+
+section:not(.current) iframe {
+  display: none;
+}
