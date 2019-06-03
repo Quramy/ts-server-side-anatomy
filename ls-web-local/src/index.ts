@@ -1,3 +1,6 @@
 import { setupEditor } from "./editor";
 
-setupEditor("editor");
+const ref = document.getElementById("editor");
+if (ref) {
+  setupEditor(ref);
+}

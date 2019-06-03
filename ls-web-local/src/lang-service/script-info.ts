@@ -69,7 +69,22 @@ export class ScriptInfo {
 
   location2number(pos: Location) {
     if (!this.svc) {
-      throw new Error("not implemented");
+      let il = 0,  ic = 0;
+      for (let i = 0; i < this.initalContent.length; i++) {
+        const cc = this.initalContent[i];
+        if (il === pos.line - 1) {
+          if (ic === pos.offset - 1) {
+            return i;
+          }
+        }
+        if (cc === "\n") {
+          ic = 0;
+          il++;
+        } else {
+          ic++;
+        }
+      }
+      return this.initalContent.length;
     }
     return this.svc.lineOffsetToPosition(pos.line, pos.offset);
   }

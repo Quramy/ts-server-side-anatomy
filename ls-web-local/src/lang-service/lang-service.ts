@@ -17,6 +17,13 @@ export type GetErrorsArgs = {
   fileName: string,
 };
 
+export type GetCompletionsArgs = {
+  fileName: string,
+  line: number,
+  offset: number,
+  prefix: string,
+}
+
 export class LanguageServiceSession {
 
   project: Project;
@@ -32,6 +39,14 @@ export class LanguageServiceSession {
 
   change({fileName, start, end, newText }: ChangeArgs) {
     this.project.getExistingScriptInfo(fileName).edit(start, end, newText);
+  }
+
+  getCompletions({ fileName, prefix, line, offset }: GetCompletionsArgs) {
+    const scriptInfo = this.project.getExistingScriptInfo(fileName);
+    const pos = scriptInfo.location2number({ line, offset });
+    const result = this.langService.getCompletionsAtPosition(fileName, pos, undefined);
+    if (!result) return [];
+    return result.entries.filter(e => e.name.startsWith(prefix));
   }
 
   getErrors({ fileName }: GetErrorsArgs) {
