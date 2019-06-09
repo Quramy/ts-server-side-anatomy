@@ -27,14 +27,14 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   resolve: {
-    extensions: [".ts", ".js"],
+    extensions: [".tsx", ".ts", ".js"],
   },
 	module: {
 		rules: [
 			{
 				include: [path.resolve(__dirname, 'src')],
 				loader: 'ts-loader',
-        test: /\.ts$/,
+        test: /\.tsx?$/,
 			},
       {
 				include: [path.resolve(__dirname, 'node_modules/typescript/lib')],

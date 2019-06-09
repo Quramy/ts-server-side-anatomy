@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <title></title>
 <style type="text/css" media="screen">
+    html {
+      background-color: #2f3129;
+    }
+    body, div, ul, li {
+      margin: 0;
+      padding: 0;
+    }
+
     #editor {
         position: absolute;
         top: 0;
@@ -15,11 +23,20 @@
       position: absolute;
       background-color: red;
     }
+
+    .Resizer.horizontal {
+      height: 11px;
+      background-color: #444;
+      margin: -5px 0;
+      border-top: 5px solid hsla(0,0%,100%,0);
+      border-bottom: 5px solid hsla(0,0%,100%,0);
+      cursor: row-resize;
+      width: 100%;
+    }
+
 </style>
 </head>
 <body>
-  <div id="editor">function hoge() {
-  console.logggg(1);
-}</div>
+  <div id="app"></div>
 </body>
 </html>

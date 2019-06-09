@@ -37,6 +37,12 @@ export class LanguageServiceSession {
     });
   }
 
+  getContentFromFileName(fileName: string) {
+    const snapshot = this.project.getScriptInfo(fileName).getSnapshot();
+    const length = snapshot.getLength();
+    return snapshot.getText(0, length);
+  }
+
   change({fileName, start, end, newText }: ChangeArgs) {
     this.project.getExistingScriptInfo(fileName).edit(start, end, newText);
   }
@@ -52,11 +58,13 @@ export class LanguageServiceSession {
   getErrors({ fileName }: GetErrorsArgs) {
     const scriptInfo = this.project.getExistingScriptInfo(fileName);
     const syntacticDiagnostics = this.langService.getSyntacticDiagnostics(fileName).map(d => ({
+      code: d.code,
       messageText: d.messageText,
       start: scriptInfo.number2location(d.start),
       end: scriptInfo.number2location(d.start + d.length),
     }));
     const semanticDeagnostics = this.langService.getSemanticDiagnostics(fileName).map(d => ({
+      code: d.code,
       messageText: d.messageText,
       start: d.start ? scriptInfo.number2location(d.start) : { line: 1, offset: 1 },
       end:  d.start && d.length ? scriptInfo.number2location(d.start + d.length) : { line: 1, offset: 1 },
