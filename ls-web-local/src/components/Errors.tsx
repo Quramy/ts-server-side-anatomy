@@ -8,6 +8,7 @@ const styles = {
     background-color: #2f3129;
     color: red;
     min-height: 200px;
+    font-size: 1.2em;
     font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
   `,
   list: css`

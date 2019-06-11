@@ -23,6 +23,7 @@ export class ScriptInfo {
     if (!this.svc) {
       return this.snapshot;
     } else {
+      // console.log(this.svc);
       return this.svc.getSnapshot();
     }
   }
@@ -43,9 +44,11 @@ export class ScriptInfo {
     const p2 = this.svc.lineOffsetToPosition(end.line, end.offset);
     this.svc.edit(p1, p2 - p1, newText);
 
-    // const l = this.svc.getSnapshot().getLength();
-    // const t = this.svc.getSnapshot().getText(0, l);
-    // console.log(l, t);
+    // Debug
+    const svc: any = this.svc;
+
+    const { root } = svc.versions[this.svc.getSnapshotVersion()].index;
+    console.log(JSON.parse(JSON.stringify(root)));
 
     this.svcVersion++;
   }

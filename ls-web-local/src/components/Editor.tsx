@@ -7,7 +7,7 @@ import { Errors } from "./Errors";
 export const Editor = () => {
   const lsp = useContext(lspContext);
   return (
-    <SplitPane split="horizontal" defaultSize={700}>
+    <SplitPane split="horizontal" defaultSize={400}>
       <div id="editor" ref={ref => setupEditor(ref, lsp)} />
       <div>
         <Errors fileName="/main.ts" />
