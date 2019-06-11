@@ -2,10 +2,13 @@ import * as ts from "typescript/lib/tsserverlibrary";
 
 import { ScriptVersionCache, createSvcFromString } from "./svc";
 import { Location } from "../types";
+import { rootLogger } from "../logger";
 
 export type CreateScriptInfoOptions = {
   content: string,
 };
+
+const logger = rootLogger.getCategory("SInfo");
 
 export class ScriptInfo {
 
@@ -38,17 +41,22 @@ export class ScriptInfo {
 
   edit(start: Location, end: Location, newText: string) {
     if (!this.svc) {
+      logger.log("upgradeToSVC");
       this.svc = createSvcFromString(this.initalContent);
     }
     const p1 = this.svc.lineOffsetToPosition(start.line, start.offset);
     const p2 = this.svc.lineOffsetToPosition(end.line, end.offset);
     this.svc.edit(p1, p2 - p1, newText);
 
-    // Debug
-    const svc: any = this.svc;
-
-    const { root } = svc.versions[this.svc.getSnapshotVersion()].index;
-    console.log(JSON.parse(JSON.stringify(root)));
+    try {
+      // Debug
+      const svc: any = this.svc;
+      const { root } = svc.versions[svc.currentVersion].index;
+      const obj = JSON.parse(JSON.stringify(root));
+      logger.log("changed", obj);
+    } catch (e) {
+      console.log(e);
+    }
 
     this.svcVersion++;
   }

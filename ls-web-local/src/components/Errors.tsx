@@ -7,7 +7,8 @@ const styles = {
   root: css`
     background-color: #2f3129;
     color: red;
-    min-height: 200px;
+    min-height: 50px;
+    height: 100%;
     font-size: 1.2em;
     font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
   `,
@@ -32,10 +33,7 @@ export const Errors = ({ fileName }: Props) => {
   const errors$ = lspClient.getErrors$(fileName);
   const [errors, updateErrors] = useState<StreamType<typeof errors$>>([]);
 
-  useEffect(() => {
-    const subscription = errors$.subscribe(updateErrors);
-    return subscription.unsubscribe;
-  }, [lspClient]);
+  useEffect(() => errors$.subscribe(updateErrors).unsubscribe, [lspClient]);
 
   return (
     <div className={styles.root}>

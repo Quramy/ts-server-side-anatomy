@@ -4,6 +4,9 @@ import { Location } from "../types";
 import { ScriptInfo } from "./script-info";
 import { TS_LIB_FILE_PREFIX } from "../consts";
 import { getTypeScriptDefinitionText } from "./lib-defitions";
+import { rootLogger } from "../logger";
+
+const logger = rootLogger.getCategory("LSHost");
 
 export class Project implements ts.LanguageServiceHost {
   fileMap: Map<string, ScriptInfo>;
@@ -67,6 +70,7 @@ export class Project implements ts.LanguageServiceHost {
 
   private createScriptInfoFromInitalContent(fileName: string, content: string) {
     const info = new ScriptInfo({ content });
+    logger.log("open", { fileName })
     this.fileMap.set(fileName, info);
 
     return info;

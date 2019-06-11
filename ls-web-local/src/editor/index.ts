@@ -10,6 +10,7 @@ import {
 import { Location } from "../types";
 import { LanguageServiceSession } from "../lang-service/lang-service";
 import { pos2loc, loc2pos } from "../util";
+import { rootLogger } from "../logger";
 
 const langTools = require("ace-builds/src-noconflict/ext-language_tools");
 
@@ -62,7 +63,7 @@ export class LspClient {
   }
 
   getErrors$(fileName: string) {
-    return merge(this.inital$, this.change$.pipe(debounceTime(100))).pipe(map(() => this.languageServiceSession.getErrors({ fileName })),
+    return merge(this.inital$, this.change$.pipe(debounceTime(1200))).pipe(map(() => this.languageServiceSession.getErrors({ fileName })),
       map(errors => {
         const syntaxErrors = errors.syntacticDiagnostics.map(d => ({
           fileName,
@@ -106,9 +107,20 @@ export function setupEditor(element: HTMLElement | null, lspClient: LspClient) {
   editor.getSession().getDocument().insert({ column: 0, row: 0 }, initalContent);
   
   const changeSource$ = new Subject<Ace.Delta>();
-  editor.on("change", delta => lspClient.nextChange("/main.ts", delta));
+  const logger = rootLogger.getCategory("ace");
+  editor.on("change", delta => {
+    logger.log("sendChange", delta);
+    lspClient.nextChange("/main.ts", delta);
+  });
 
-  lspClient.getErrors$("/main.ts").subscribe(errors => editorSession.setAnnotations(errors));
+  lspClient.getErrors$("/main.ts").subscribe(errors => {
+    if (errors.length) {
+      logger.log("rcvError", errors);
+    } else {
+      logger.log("clearError");
+    }
+    editorSession.setAnnotations(errors);
+  });
 
   const completer = createCompleter(lspClient.languageServiceSession);
   langTools.addCompleter(completer);

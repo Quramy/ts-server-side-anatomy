@@ -1,6 +1,7 @@
 import * as ts from "typescript/lib/tsserverlibrary";
 import { Location } from "../types";
 import { Project } from "./project";
+import { rootLogger } from "../logger";
 
 export type CreateLanguageServiceSessionOption = {
   initialContents: {fileName: string, content: string}[],
@@ -24,6 +25,8 @@ export type GetCompletionsArgs = {
   prefix: string,
 }
 
+const lsLogger = rootLogger.getCategory("LS");
+
 export class LanguageServiceSession {
 
   project: Project;
@@ -31,7 +34,19 @@ export class LanguageServiceSession {
 
   constructor(option: CreateLanguageServiceSessionOption) {
     this.project = new Project();
-    this.langService = ts.createLanguageService(this.project);
+    this.langService = new Proxy(ts.createLanguageService(this.project), {
+      get: (target: ts.LanguageService, name: keyof ts.LanguageService) => {
+        if (!["getCompletionsAtPosition", "getSyntacticDiagnostics", "getSemanticDiagnostics"].includes(name)) {
+          return target[name];
+        }
+        return function() {
+          lsLogger.log(`start_${name}`, [...arguments]);
+          const res = (target[name] as Function).apply(target, arguments);
+          lsLogger.log(`end_${name}`);
+          return res;
+        };
+      },
+    });
     option.initialContents.forEach(initialContent => {
       this.project.loadContent(initialContent.fileName, initialContent.content);
     });
