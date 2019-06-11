@@ -2,3 +2,16 @@
 section:not(.current) iframe {
   display: none;
 }
+
+.editorFrame {
+  width: 100%;
+  height: 80vh;
+}
+
+iframe:not(.editorFrame) {
+  margin: 20px auto;
+}
+
+section.slide > h2 + *:not([id]) {
+  margin-top: 50px;
+}

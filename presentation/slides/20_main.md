@@ -2,15 +2,7 @@
 
 ---
 
-# アンケート1
-
----
-
 # TypeScript書いたことある人 🙋
-
----
-
-# アンケート2
 
 ---
 
@@ -26,41 +18,102 @@
 
 ---
 
-# **Language Service**
+# **潜入！TypeScriptエディタの裏側**
 
 ---
 
-# Disclaimer
+# 要するにこの辺の話
 
-多分今日の内容はあんまり役にたたない
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D220%253A0" allowfullscreen></iframe>
 
----
-
-# Architecture overview
-
-TBD img
+[*Architectural Overview*](https://github.com/microsoft/TypeScript/wiki/Architectural-Overview#layer-overview) より
 
 ---
 
-# **TSServer**
+# **1. Editor agnostic**
 
 ---
 
-## TSServerはエディタからの命令を受け付ける
+## 求められる言語サポート
 
-- こんなファイルを開いたよ
-- ファイルのエラーを教えて
-- どんな補完候補あるの？
-- このclassはどのモジュールに定義されてるか教えて
-- etc..
-
----
-
-## TSServerはSTDIO
+- エラーチェック
+- コード補完
+- 定義元へのジャンプ
+- 呼び出し元への参照
+- etc...
 
 ---
 
-## やりとりを覗いてみよう
+### 言語サポートをエディタごとに実装するのは大変 😇
+
+不要な宗教論争の元にもなりかねない
+
+---
+
+## tsserver
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D222%253A2" allowfullscreen></iframe>
+
+エディタを問わずにTypeScriptの言語サポートが得られる 👍
+
+---
+
+## tsserverの特徴
+
+* エディタ - tsserver 間はSTDIO通信。JavaScript不要！
+* ペイロードはJSON
+
+---
+
+## 百聞は一見に如かず
+
+```ts
+function hoge(x: string) {
+  console.log(x);
+}
+```
+
+「2行目15列目の変数 `x` の型は何？」をTSServerに聞いてみよう
+
+---
+
+```sh
+# test.sh
+
+cat << EOF > sample.ts
+function hoge(x: string) {
+  console.log(x);
+}
+EOF
+
+npx tsserver << EOF | tail -n 1 | jq .body
+{"command":"open","arguments":{"file":"${PWD}/sample.ts"}}
+{"command":"quickinfo","arguments":{"file":"${PWD}/sample.ts","line":2,"offset":15}}
+EOF
+```
+
+```sh
+$ sh test.sh
+{
+  "kind": "parameter",
+  "kindModifiers": "",
+  "start": {
+    "line": 2,
+    "offset": 15
+  },
+  "end": {
+    "line": 2,
+    "offset": 16
+  },
+  "displayString": "(parameter) x: string",
+  "documentation": "",
+  "tags": []
+}
+```
+
+---
+
+## もうちょいガチなやつ
 
 ```sh
 $ export TSS_LOG="-file `pwd`/tsserver.log -level verbose"
@@ -146,52 +199,113 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ---
 
-```ts
-function hoge(x: string) {
-  console.log(x);
-}
-```
-
-「2行目15列目の変数 `x` の型は何？」をTSServerに聞いてみよう
+# **2. Virtual File System**
 
 ---
 
-```sh
-# test.sh
+## Language Service & Language Service Host
 
-cat << EOF > sample.ts
-function hoge(x: string) {
-  console.log(x);
-}
-EOF
+```typescript
+import * as ts from "typescript";
 
-npx tsserver << EOF | tail -n 1 | jq .body
-{"command":"open","arguments":{"file":"${PWD}/sample.ts"}}
-{"command":"quickinfo","arguments":{"file":"${PWD}/sample.ts","line":2,"offset":15}}
-EOF
+const host = { ... };
+const languageService = ts.createLanguageService(host);
+
+languageService.getQuickInfoAtPosition(...);
 ```
 
-```sh
-$ sh test.sh
-{
-  "kind": "parameter",
-  "kindModifiers": "",
-  "start": {
-    "line": 2,
-    "offset": 15
-  },
-  "end": {
-    "line": 2,
-    "offset": 16
-  },
-  "displayString": "(parameter) x: string",
-  "documentation": "",
-  "tags": []
+- Lanage Service Host: Language ServiceにTypeScript プロジェクトのファイル情報を提供する
+- Lanage Service: TypeScript プロジェクトの情報を解析する
+
+---
+
+```typescript
+interface LanguageServiceHost {
+  getCompilationSettings(): CompilerOptions;
+
+  getScriptFileNames(): string[];
+  getScriptVersion(fileName: string): string;
+  getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
+
+  getCurrentDirectory(): string;
+  getDefaultLibFileName(options: CompilerOptions): string;
+  /* 以下略 */
 }
 ```
 
 ---
 
-# **Language Service**
+## TSServerの場合
 
-TSServerはLanguage Serviceに処理を委譲している
+---
+
+## Language ServiceはNode.jsのfsに依存してない
+
+---
+
+## 好きな環境で動かすこともできる
+
+---
+
+<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+
+---
+
+## State of Language Service Host
+
+- Language Service Hostはエディタのバッファをstateとして管理している
+- バッファの変更を検知して、自身の管理するスクリプトのスナップショットが更新されたことを通知する責務がある
+  - `getScriptVersion(fileName: string): string;`
+  - `getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;`
+
+---
+
+## ts.IScriptSnapshot
+
+```typescript
+interface IScriptSnapshot {
+  /** Gets a portion of the script snapshot specified by [start, end). */
+  getText(start: number, end: number): string;
+  /** Gets the length of this script snapshot. */
+  getLength(): number;
+  /**
+   * Gets the TextChangeRange that describe how the text changed between this text and
+   * an older version.  This information is used by the incremental parser to determine
+   * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+   * change range cannot be determined.  However, in that case, incremental parsing will
+   * not happen and the entire document will be re - parsed.
+   */
+  getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
+  /** Releases all resources held by this script snapshot */
+  dispose?(): void;
+}
+```
+
+--- 
+
+## Language Serviceの実行フロー
+
+### 例: エラー取得
+
+---
+
+## エディタからの更新
+
+- (エディタ -> セッション): バッファの変更内容(position, insertedText)を通知
+- (セッション -> LanguageServiceHost): 変更内容に従って、自身が管理するファイル情報を更新する
+  - バッファに該当するファイルのversionが上がる
+
+---
+
+## エラー情報の取得
+
+- (エディタ -> セッション): エラー情報取得を依頼
+- (セッション -> languageService): エラー情報取得メソッド(getSemanticDeagnosticsなど)を実行
+- (LanguageService -> LanguageServiceHost): ファイルのversionを取得して変更有無を確認
+- (LanguageService -> LanguageServiceHost): 変更が発生したファイルの変更発生範囲( `IScriptSnapshot#getChangeRange` )を取得
+
+---
+
+---
+
+- エディタで1文字1文字typeされるたびに、

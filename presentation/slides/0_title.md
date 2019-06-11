@@ -1,4 +1,4 @@
-# TypeScript frontend under the food
+# TypeScript Server Side Anatomy
 
 ### TypeScript meetup #1
 ### by @Quramy
