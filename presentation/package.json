@@ -7,13 +7,15 @@
     "start": "fusuma start",
     "prebuild": "rimraf dist && gulp",
     "build": "fusuma build -d fusuma_wd && mv fusuma_wd/dist dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postbuild": "gulp postBuild",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "fusuma": "^1.1.2",
+    "gh-pages": "^2.0.1",
     "gulp": "^4.0.2",
     "gulp-replace": "^1.0.0",
     "image-downloader": "^3.4.2",

@@ -12,6 +12,10 @@ const token = fs.readFileSync(".figmatoken", "utf-8").trim();
 
 let images = [];
 
+function copyAssets() {
+  return gulp.src(["assets/**/*"]).pipe(gulp.dest("dist/assets"));
+}
+
 function copy() {
   return gulp.src([".fusumarc.yml", "index.js", "styles.css"]).pipe(gulp.dest("fusuma_wd"));
 }
@@ -49,4 +53,5 @@ function fetch() {
   }));
 }
 
+exports.postBuild = gulp.series(copyAssets);
 exports.default = gulp.series(copy, replaceIframe, fetch);
