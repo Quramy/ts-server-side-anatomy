@@ -14,7 +14,7 @@ const rangeItems = (n: number) => {
 
 function main() {
   const originalSourceText = `declare namespace fuga {
-${rangeItems(10000).map((_, i) => "  function fn" + i + "(): number;").join("\n")}
+${rangeItems(4000 - 3).map((_, i) => "  function fn" + i + "(): number;").join("\n")}
 }
   `;
 
