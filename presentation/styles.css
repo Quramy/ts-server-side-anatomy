@@ -15,3 +15,11 @@ iframe:not(.editorFrame) {
 section.slide > h2 + *:not([id]) {
   margin-top: 50px;
 }
+
+ul:not(:last-child) {
+  margin-bottom: 50px;
+}
+
+ul>li {
+  line-height: 1.6;
+}

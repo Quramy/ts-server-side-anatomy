@@ -73,11 +73,11 @@ function hoge(x: string) {
 }
 ```
 
-「2行目15列目の変数 `x` の型は何？」をTSServerに聞いてみよう
+「2行目15列目の変数 `x` の型は何？」をtsserverに聞いてみよう
 
 ---
 
-```sh
+```bash
 # test.sh
 
 cat << EOF > sample.ts
@@ -92,7 +92,7 @@ npx tsserver << EOF | tail -n 1 | jq .body
 EOF
 ```
 
-```sh
+```bash
 $ sh test.sh
 {
   "kind": "parameter",
@@ -115,7 +115,7 @@ $ sh test.sh
 
 ## もうちょいガチなやつ
 
-```sh
+```bash
 $ export TSS_LOG="-file `pwd`/tsserver.log -level verbose"
 $ code .
 ```
@@ -203,7 +203,16 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ---
 
-## Language Service & Language Service Host
+## tsserverの中身
+
+IMG
+
+---
+
+## Language Service & Host
+
+- Lanage Service: TypeScript プロジェクトの情報を解析する
+- Lanage Service Host: Language ServiceにTypeScript プロジェクトのファイル情報を提供する
 
 ```typescript
 import * as ts from "typescript";
@@ -214,19 +223,21 @@ const languageService = ts.createLanguageService(host);
 languageService.getQuickInfoAtPosition(...);
 ```
 
-- Lanage Service Host: Language ServiceにTypeScript プロジェクトのファイル情報を提供する
-- Lanage Service: TypeScript プロジェクトの情報を解析する
-
 ---
+
+## Language Service Host I/F
 
 ```typescript
 interface LanguageServiceHost {
   getCompilationSettings(): CompilerOptions;
 
+  // ファイル名の一覧を返す
   getScriptFileNames(): string[];
-  getScriptVersion(fileName: string): string;
+
+  // ファイル名からファイルを返す
   getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
 
+  getScriptVersion(fileName: string): string;
   getCurrentDirectory(): string;
   getDefaultLibFileName(options: CompilerOptions): string;
   /* 以下略 */
@@ -235,15 +246,11 @@ interface LanguageServiceHost {
 
 ---
 
-## TSServerの場合
-
----
-
 ## Language ServiceはNode.jsのfsに依存してない
 
 ---
 
-## 好きな環境で動かすこともできる
+## ブラウザでLanguage Serviceを動かすことも可能
 
 ---
 
@@ -306,6 +313,4 @@ interface IScriptSnapshot {
 
 ---
 
----
-
-- エディタで1文字1文字typeされるたびに、
+# **3. Mutation**

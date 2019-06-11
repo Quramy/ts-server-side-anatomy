@@ -14,7 +14,9 @@ slide:
   isVertical: false
   code:
     languages:
+      - bash
       - javascript
+      - typescript
     plugins: []
     theme: default
 extends:
