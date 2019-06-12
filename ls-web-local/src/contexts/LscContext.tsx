@@ -1,7 +1,7 @@
 import React, { createContext } from "react";
-import { LspClient } from "../editor";
+import { LsClient } from "../editor";
 
-const ctx = createContext<LspClient>(null as any);
+const ctx = createContext<LsClient>(null as any);
 const { Provider } = ctx;
 
 export const lspContext = ctx;
@@ -17,14 +17,14 @@ function sum(a: number, b: number) {
 }
 `
 
-export class LspProvider extends React.Component<{}, {}> {
-  private lspClient = new LspClient({
+export class LscProvider extends React.Component<{}, {}> {
+  private lsc = new LsClient({
     initialContents: [{ fileName: "/main.ts", content: initalContent }],
   });
 
   render() {
     return (
-      <Provider value={this.lspClient}>
+      <Provider value={this.lsc}>
         {this.props.children}
       </Provider>
     )

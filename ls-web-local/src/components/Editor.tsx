@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { setupEditor } from "../editor";
 import SplitPane from "react-split-pane";
-import { lspContext } from "../contexts/LspContext";
+import { lspContext } from "../contexts/LscContext";
 import { Errors } from "./Errors";
 import { Logger } from "./Logger";
 

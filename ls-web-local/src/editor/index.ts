@@ -24,11 +24,11 @@ function createCompleter(langServiceSession: LanguageServiceSession) {
   };
 }
 
-export type CreateLspClientOptions = {
+export type CreateLsClientOptions = {
   initialContents: { fileName: string, content: string }[],
 }
 
-export class LspClient {
+export class LsClient {
 
   public readonly languageServiceSession: LanguageServiceSession;
 
@@ -36,7 +36,7 @@ export class LspClient {
   private change$: Subject<{ fileName: string, delta: Ace.Delta }>;
   private subscriptions = new Subscription();
 
-  constructor(options: CreateLspClientOptions) {
+  constructor(options: CreateLsClientOptions) {
     this.languageServiceSession = new LanguageServiceSession(options);
     this.change$ = new Subject();
     this.observeChange();
@@ -87,7 +87,7 @@ export class LspClient {
   }
 }
 
-export function setupEditor(element: HTMLElement | null, lspClient: LspClient) {
+export function setupEditor(element: HTMLElement | null, lspClient: LsClient) {
   if (!element) return;
 
   const editor = ace.edit(element);

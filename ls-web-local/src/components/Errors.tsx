@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { lspContext } from "../contexts/LspContext";
+import { lspContext } from "../contexts/LscContext";
 import { StreamType } from "../types";
 import { css } from "emotion";
 
