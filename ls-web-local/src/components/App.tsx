@@ -11,7 +11,7 @@ export const App = () => {
   const { showLogger } = config.initial;
   if (showLogger) {
     return (
-      <SplitPane split="vertical" primary="first" defaultSize={"65%"}>
+      <SplitPane split="vertical" primary="first" defaultSize={"45%"}>
         <SplitPane split="horizontal" defaultSize={400}>
           <Editor />
           <Errors fileName="/main.ts" />
