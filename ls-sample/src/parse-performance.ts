@@ -1,8 +1,6 @@
 import * as ts from "typescript";
-import path from "path";
-import fs from "fs";
 
-const insertText = "\ndeclare namespace hoge { export function fuga(): void; }"
+const insertText = "\ndeclare namespace hoge { export function fooobar(): void; }"
 
 const rangeItems = (n: number) => {
   const arr = [];
@@ -12,9 +10,9 @@ const rangeItems = (n: number) => {
   return arr;
 };
 
-function main() {
+function checkPerf(lines: number) {
   const originalSourceText = `declare namespace fuga {
-${rangeItems(4000 - 3).map((_, i) => "  function fn" + i + "(): number;").join("\n")}
+${rangeItems(lines - 3).map((_, i) => "  function fn" + i + "(): number;").join("\n")}
 }
   `;
 
@@ -34,11 +32,17 @@ ${rangeItems(4000 - 3).map((_, i) => "  function fn" + i + "(): number;").join("
   }
   const e2 = Date.now();
 
+  console.log("==================================")
   console.log(`originalSourceText lines: ${originalSourceText.split("\n").length}`);
   console.log(`originalSourceText length: ${originalSourceText.length}`);
   console.log(`insertText length: ${insertText.length}`);
   console.log(`elapsed time with incremental parsing: ${e1 - s1}`);
   console.log(`elapsed time with non-incremental parsing: ${e2 - s2}`);
+  console.log("");
 }
 
-main();
+checkPerf(100);
+checkPerf(500);
+checkPerf(1000);
+checkPerf(5000);
+checkPerf(10000);
