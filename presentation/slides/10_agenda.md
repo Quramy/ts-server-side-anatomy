@@ -1,4 +1,4 @@
 ## About me
 
 - Yosuke Kurami (@Quramy)
-- Webフロントエンドエンジニア
+- Web front-end developer

@@ -1,16 +1,16 @@
-# ところで
+# BTW
 
 ---
 
-# TypeScript書いたことある人 🙋
+# Have you written TypeScript? 🙋
 
 ---
 
-# Language Service使ったことある人 🙋
+# Have you used Language Service? 🙋
 
 ---
 
-# きっと使ったことがあるはず
+# You must have.
 
 ---
 
@@ -18,15 +18,15 @@
 
 ---
 
-# **潜入！TypeScriptエディタの裏側**
+# **TypeScript editor under the food**
 
 ---
 
-# 要するにこの辺の話
+# That is ...
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D220%253A0" allowfullscreen></iframe>
 
-[*Architectural Overview*](https://github.com/microsoft/TypeScript/wiki/Architectural-Overview#layer-overview) より
+[*Architectural Overview*](https://github.com/microsoft/TypeScript/wiki/Architectural-Overview#layer-overview)
 
 ---
 
@@ -34,19 +34,23 @@
 
 ---
 
-## 求められる言語サポート
+## Functions what we want
 
-- エラーチェック
-- コード補完
-- 定義元へのジャンプ
-- 呼び出し元への参照
+- Error checking
+- Completion
+- Jump to definition
+- Jump to references
 - etc...
 
 ---
 
-### 言語サポートをエディタごとに実装するのは大変 😇
+## It's toooo tough to implement the features as each editor's plugin 😇
 
-不要な宗教論争の元にもなりかねない
+---
+
+## No more [Editor war](https://en.wikipedia.org/wiki/Editor_war)!
+
+![editor_war](https://pbs.twimg.com/media/Bhfbnn3CMAA93mg.png:large)
 
 ---
 
@@ -54,18 +58,19 @@
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D222%253A2" allowfullscreen></iframe>
 
-エディタを問わずにTypeScriptの言語サポートが得られる 👍
+TypeScript's server, as known as **tsserver**, gives language support function's to all editor/IDEs 👍
 
 ---
 
-## tsserverの特徴
+## Features of tsserver
 
-* エディタ - tsserver 間はSTDIO通信。JavaScript不要！
-* ペイロードはJSON
+* Communicates over STDIO
+  * Editor/IDEs need **no JavaScript** engine
+* Using JSON paylod such as JSON RPC protocol
 
 ---
 
-## 百聞は一見に如かず
+## Seeing is believing
 
 ```ts
 function hoge(x: string) {
@@ -73,7 +78,7 @@ function hoge(x: string) {
 }
 ```
 
-「2行目15列目の変数 `x` の型は何？」をtsserverに聞いてみよう
+Let's ask to tsserver "What's type of `x` at the line: 2 / col: 15"
 
 ---
 
@@ -113,7 +118,7 @@ $ sh test.sh
 
 ---
 
-## もうちょいガチなやつ
+## Another, read world example
 
 ```bash
 $ export TSS_LOG="-file `pwd`/tsserver.log -level verbose"
@@ -186,15 +191,15 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ---
 
-# 長い 😇
+# Looooooong 😇
 
 ---
 
-# 読み方
+# How to read tsserver's log
 
-`{ "type": "request", ... }` ってなってるとこがエディタからのリクエスト
+`{ "type": "request", ... }` means a request from the editor.
 
-`{ "command":"completionInfo", ... }` ってなってるのが、リクエストの種類（要するにメソッド）
+`{ "command":"completionInfo", ... }` means kind of request.
 
 
 ---
@@ -203,7 +208,7 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ---
 
-## tsserverの中身
+## Components in tsserver
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D373%253A0" allowfullscreen></iframe>
 
@@ -211,8 +216,8 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ## Language Service & Host
 
-- Lanage Service: TypeScript プロジェクトの情報を解析する
-- Lanage Service Host: Language ServiceにTypeScript プロジェクトのファイル情報を提供する
+- Lanage Service: Analyzes TypeScript project information(errors, types, etc...)
+- Lanage Service Host: Provides file information of the project to the language service
 
 ```typescript
 import * as ts from "typescript";
@@ -231,32 +236,25 @@ languageService.getQuickInfoAtPosition(...);
 interface LanguageServiceHost {
   getCompilationSettings(): CompilerOptions;
 
-  // ファイル名の一覧を返す
   getScriptFileNames(): string[];
 
-  // ファイル名からファイルを返す
   getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
 
   getScriptVersion(fileName: string): string;
   getCurrentDirectory(): string;
   getDefaultLibFileName(options: CompilerOptions): string;
-  /* 以下略 */
+
+  /* skip the rest */
 }
 ```
 
 ---
 
-## Language ServiceはNode.jsのfsに依存してない
+## Language Service not depend on Node.js's fs
 
 ---
 
-## ブラウザでLanguage Serviceを動かすことも可能
-
----
-
-<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
-
----
+## Language Service run on Web browser
 
 ---
 
@@ -264,7 +262,17 @@ interface LanguageServiceHost {
 
 ---
 
-# **3. Mutation**
+---
+
+<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+
+---
+
+# **3. Mutation of script**
+
+---
+
+![cat_typing](https://media.giphy.com/media/lJNoBCvQYp7nq/giphy.gif)
 
 ---
 
@@ -272,14 +280,16 @@ interface LanguageServiceHost {
 
 ---
 
-# LSHostは変更を管理しなくてはならない
+# LSHost needs accept "what developer changes"
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D401%253A7" allowfullscreen></iframe>
 
 
 ---
 
-## 2種類のファイル
+## エディタのミラーリング
+
+tsserverが管理するファイルは以下に大別される:
 
 * 開発者が編集しているファイル（エディタで開いたファイル）
 * dom.lib.d.tsやライブラリのファイル
@@ -292,6 +302,7 @@ tsserverでは「ファイルの変更を受け付けた」際に、ファイル
 
 <iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
 
+
 ---
 
 ## Data Structure of SVC
@@ -300,19 +311,33 @@ tsserverでは「ファイルの変更を受け付けた」際に、ファイル
 
 ---
 
+## Rope
 
-## State of Language Service Host
+* [Rope](https://en.wikipedia.org/wiki/Rope_(data_structure) の実装
+* insert/deleteをO(log N) で行える
 
-- Language Service Hostはエディタのバッファをstateとして管理している
-- バッファの変更を検知して、自身の管理するスクリプトのスナップショットが更新されたことを通知する責務がある
-  - `getScriptVersion(fileName: string): string;`
-  - `getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;`
 
 ---
 
-## ts.IScriptSnapshot
+# **4. Mutation of AST**
+
+---
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D428%253A40" allowfullscreen></iframe>
+
+---
+
+## Changes info
 
 ```typescript
+interface LanguageServiceHost {
+
+  getScriptVersion(fileName: string): string;
+  getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
+
+  /* 以下略 */
+}
+
 interface IScriptSnapshot {
   /** Gets a portion of the script snapshot specified by [start, end). */
   getText(start: number, end: number): string;
@@ -331,26 +356,40 @@ interface IScriptSnapshot {
 }
 ```
 
---- 
+---
 
-## Language Serviceの実行フロー
-
-### 例: エラー取得
+## What's incremental parsing ?
 
 ---
 
-## エディタからの更新
+### Example
 
-- (エディタ -> セッション): バッファの変更内容(position, insertedText)を通知
-- (セッション -> LanguageServiceHost): 変更内容に従って、自身が管理するファイル情報を更新する
-  - バッファに該当するファイルのversionが上がる
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A59" allowfullscreen></iframe>
 
 ---
 
-## エラー情報の取得
+### AST before
 
-- (エディタ -> セッション): エラー情報取得を依頼
-- (セッション -> languageService): エラー情報取得メソッド(getSemanticDeagnosticsなど)を実行
-- (LanguageService -> LanguageServiceHost): ファイルのversionを取得して変更有無を確認
-- (LanguageService -> LanguageServiceHost): 変更が発生したファイルの変更発生範囲( `IScriptSnapshot#getChangeRange` )を取得
+<iframe class="editorFrame" src="https://astexplorer.net/#/gist/45019fa3a72feaf5649082842653a90f/5ba306a8750ed18347042e477834f1fda82de7d3"></iframe>
 
+
+---
+
+### AST after
+
+<iframe class="editorFrame" src="https://astexplorer.net/#/gist/45019fa3a72feaf5649082842653a90f/f3c88f1adcc32b9bd713e2cff06a4dcd95228925"></iframe>
+
+
+---
+
+## 1. Make the actual change
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A39" allowfullscreen></iframe>
+
+---
+
+## 2. Visit each old nodes and mark intersected
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A0" allowfullscreen></iframe>
+
+---
