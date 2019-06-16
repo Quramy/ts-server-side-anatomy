@@ -205,7 +205,7 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ## tsserverの中身
 
-IMG
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D373%253A0" allowfullscreen></iframe>
 
 ---
 
@@ -257,6 +257,49 @@ interface LanguageServiceHost {
 <iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
 
 ---
+
+---
+
+<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+
+---
+
+# **3. Mutation**
+
+---
+
+## エディタ側では刻一刻コードが入力されている
+
+---
+
+# LSHostは変更を管理しなくてはならない
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D401%253A7" allowfullscreen></iframe>
+
+
+---
+
+## 2種類のファイル
+
+* 開発者が編集しているファイル（エディタで開いたファイル）
+* dom.lib.d.tsやライブラリのファイル
+
+tsserverでは「ファイルの変更を受け付けた」際に、ファイルの管理方法を格上げする。
+
+それがScriptVersionCache
+
+---
+
+<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+
+---
+
+## Data Structure of SVC
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D428%253A0" allowfullscreen></iframe>
+
+---
+
 
 ## State of Language Service Host
 
@@ -311,6 +354,3 @@ interface IScriptSnapshot {
 - (LanguageService -> LanguageServiceHost): ファイルのversionを取得して変更有無を確認
 - (LanguageService -> LanguageServiceHost): 変更が発生したファイルの変更発生範囲( `IScriptSnapshot#getChangeRange` )を取得
 
----
-
-# **3. Mutation**
