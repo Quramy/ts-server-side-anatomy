@@ -2,11 +2,11 @@
 
 ---
 
-# Have you written TypeScript? 🙋
+# Have you written something in TypeScript? 🙋
 
 ---
 
-# Have you used Language Service? 🙋
+# Have you used TypeScript's language service? 🙋
 
 ---
 
@@ -18,7 +18,7 @@
 
 ---
 
-# **TypeScript editor under the food**
+# **TypeScript editor, what's under the hood**
 
 ---
 
@@ -58,7 +58,7 @@
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D222%253A2" allowfullscreen></iframe>
 
-TypeScript's server, as known as **tsserver**, gives language support function's to all editor/IDEs 👍
+TypeScript's server, a.k.a. **tsserver**, gives language functions to editor/IDEs 👍
 
 ---
 
@@ -118,7 +118,7 @@ $ sh test.sh
 
 ---
 
-## Another, read world example
+## Another, real world example
 
 ```bash
 $ export TSS_LOG="-file `pwd`/tsserver.log -level verbose"
@@ -250,7 +250,7 @@ interface LanguageServiceHost {
 
 ---
 
-## Language Service not depend on Node.js's fs
+## Language Service does not depend on Node.js's fs
 
 ---
 
@@ -258,9 +258,11 @@ interface LanguageServiceHost {
 
 ---
 
-<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+<iframe class="editorFrame" src="assets/editor/dist/index.html?disabled-logger=true&no-delay=true"></iframe>
 
 ---
+
+## How many files are opened ?
 
 ---
 
@@ -272,31 +274,30 @@ interface LanguageServiceHost {
 
 ---
 
+## Code is typed every moment
+
 ![cat_typing](https://media.giphy.com/media/lJNoBCvQYp7nq/giphy.gif)
 
 ---
 
-## エディタ側では刻一刻コードが入力されている
-
----
-
-# LSHost needs accept "what developer changes"
+# LSHost needs to accept "what developer changes"
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D401%253A7" allowfullscreen></iframe>
 
 
 ---
 
-## エディタのミラーリング
+## 2 kinds of files watched by tsserver:
 
-tsserverが管理するファイルは以下に大別される:
+* **Mutable: Files you're editing**
+  * The changes may not be applied on your file system
+* Immutable: e.g. dom.lib.d.ts or libraries' .ts files
 
-* 開発者が編集しているファイル（エディタで開いたファイル）
-* dom.lib.d.tsやライブラリのファイル
+It means that tsserver should have not only virtual file sysytem but also the mirror of editor's buffers.  
+  
+  
 
-tsserverでは「ファイルの変更を受け付けた」際に、ファイルの管理方法を格上げする。
-
-それがScriptVersionCache
+tsserver upgrades data structure of the virtual file to `ScriptVersionCache` (SVC) when accepting the file changes.
 
 ---
 
@@ -305,7 +306,7 @@ tsserverでは「ファイルの変更を受け付けた」際に、ファイル
 
 ---
 
-## Data Structure of SVC
+## Data structure of SVC
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D428%253A0" allowfullscreen></iframe>
 
@@ -313,9 +314,11 @@ tsserverでは「ファイルの変更を受け付けた」際に、ファイル
 
 ## Rope
 
-* [Rope](https://en.wikipedia.org/wiki/Rope_(data_structure) の実装
-* insert/deleteをO(log N) で行える
+<img style="height: 30vh;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Vector_Rope_index.svg/1920px-Vector_Rope_index.svg.png" alt="">
 
+[*Rope data structure*](https://en.wikipedia.org/wiki/Rope_(data_structure))
+
+* O(log N) time complexity for insertion/deletion
 
 ---
 
@@ -335,7 +338,7 @@ interface LanguageServiceHost {
   getScriptVersion(fileName: string): string;
   getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
 
-  /* 以下略 */
+  /* skip the rest */
 }
 
 interface IScriptSnapshot {
@@ -393,3 +396,70 @@ interface IScriptSnapshot {
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A0" allowfullscreen></iframe>
 
 ---
+
+## FYI: Performance of incremental parsing
+
+---
+
+<iframe width="968" height="598.5927678283317" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRF1eWeNCv2389PiiqCjEXzCWIhvPzkO_mv_WEwYC_gy0bX5wQQvx9RQhKzT1ypvHShpW4tmLtrQOIS/pubchart?oid=462115573&amp;format=image"></iframe>
+
+* x-axis: The numbers of lines of original source code
+* y-axis: Time [msec] to parse for 60 times insertion
+
+---
+
+### source
+
+[https://github.com/Quramy/tsjp-resources/blob/master/ls-sample/src/parse-performance.ts](https://github.com/Quramy/tsjp-resources/blob/master/ls-sample/src/parse-performance.ts)
+
+```typescript
+import * as ts from "typescript";
+
+const insertText = "\ndeclare namespace hoge { export function fooobar(): void; }"
+
+const rangeItems = (n: number) => {
+  const arr = [];
+  for(let i = 0; i < n; i++) {
+    arr[i] = i;
+  }
+  return arr;
+};
+
+function checkPerf(lines: number) {
+  const originalSourceText = `declare namespace fuga {
+${rangeItems(lines - 3).map((_, i) => "  function fn" + i + "(): number;").join("\n")}
+}
+  `;
+
+  const origSource = ts.createSourceFile("index.d.ts", originalSourceText, ts.ScriptTarget.ESNext, true, ts.ScriptKind.TS);
+
+  const s1 = Date.now();
+  let sourceFile = origSource;
+  for (let i = 0; i < insertText.length; i++) {
+    const pos = sourceFile.end;
+    sourceFile = ts.updateSourceFile(sourceFile, sourceFile.getText() + insertText[i], { newLength: 1, span: { start: pos, length: 0 } });
+  }
+  const e1 = Date.now();
+
+  const s2 = Date.now();
+  for (let i = 0; i < insertText.length; i++) {
+    const origSource = ts.createSourceFile("index.d.ts", originalSourceText + insertText.slice(0, i), ts.ScriptTarget.ESNext, true, ts.ScriptKind.TS);
+  }
+  const e2 = Date.now();
+
+  console.log("==================================")
+  console.log(`originalSourceText lines: ${originalSourceText.split("\n").length}`);
+  console.log(`originalSourceText length: ${originalSourceText.length}`);
+  console.log(`insertText length: ${insertText.length}`);
+  console.log(`elapsed time with incremental parsing: ${e1 - s1}`);
+  console.log(`elapsed time with non-incremental parsing: ${e2 - s2}`);
+  console.log("");
+}
+
+checkPerf(100);
+checkPerf(500);
+checkPerf(1000);
+checkPerf(5000);
+checkPerf(10000);
+```
+

@@ -16,8 +16,16 @@ section.slide > h2 + *:not([id]) {
   margin-top: 50px;
 }
 
+ul:not(:first-child) {
+  margin-top: 50px;
+}
+
 ul:not(:last-child) {
   margin-bottom: 50px;
+}
+
+li > ul:not(:first-child) {
+  margin-top: 0;
 }
 
 ul>li {
