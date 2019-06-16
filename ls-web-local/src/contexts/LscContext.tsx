@@ -1,25 +1,18 @@
-import React, { createContext } from "react";
-import { LsClient } from "../editor";
+import React, { useContext, createContext } from "react";
+import { Configuration } from "../types";
+import { LsClient } from "../lang-service-client";
 
 const ctx = createContext<LsClient>(null as any);
 const { Provider } = ctx;
 
-export const lspContext = ctx;
+export type Props = {
+  config: Configuration,
+};
 
-const initalContent = `
-const x = 1;
-const xx = 2;
-
-console.log(sum(x, x));
-
-function sum(a: number, b: number) {
-  return a + b;
-}
-`
-
-export class LscProvider extends React.Component<{}, {}> {
+export class LscProvider extends React.Component<Props> {
   private lsc = new LsClient({
-    initialContents: [{ fileName: "/main.ts", content: initalContent }],
+    initialContents: [{ fileName: "/main.ts", content: this.props.config.initialContent }],
+    debounceTime: this.props.config.debounceTime,
   });
 
   render() {
@@ -30,3 +23,5 @@ export class LscProvider extends React.Component<{}, {}> {
     )
   }
 }
+
+export const lscContext = ctx;

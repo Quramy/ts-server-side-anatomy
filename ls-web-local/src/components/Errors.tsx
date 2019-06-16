@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { lspContext } from "../contexts/LscContext";
+import { lscContext } from "../contexts/LscContext";
 import { StreamType } from "../types";
 import { css } from "emotion";
 
@@ -29,7 +29,7 @@ export type Props = {
   fileName: string,
 }
 export const Errors = ({ fileName }: Props) => {
-  const lspClient = useContext(lspContext);
+  const lspClient = useContext(lscContext);
   const errors$ = lspClient.getErrors$(fileName);
   const [errors, updateErrors] = useState<StreamType<typeof errors$>>([]);
 

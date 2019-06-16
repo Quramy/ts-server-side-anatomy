@@ -51,6 +51,7 @@ export class ScriptInfo {
     try {
       // Debug
       const svc: any = this.svc;
+      console.log(svc);
       const { root } = svc.versions[svc.currentVersion].index;
       const obj = JSON.parse(JSON.stringify(root));
       logger.log("changed", obj);

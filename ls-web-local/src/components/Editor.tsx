@@ -1,19 +1,11 @@
 import React, { useContext } from "react";
 import { setupEditor } from "../editor";
-import SplitPane from "react-split-pane";
-import { lspContext } from "../contexts/LscContext";
-import { Errors } from "./Errors";
-import { Logger } from "./Logger";
+import { lscContext } from "../contexts/LscContext";
+import { conigCtx } from "../contexts/ConfigureContext";
 
 export const Editor = () => {
-  const lsp = useContext(lspContext);
+  const lsp = useContext(lscContext);
   return (
-    <SplitPane split="vertical" primary="first" defaultSize={"65%"}>
-      <SplitPane split="horizontal" defaultSize={400}>
-        <div id="editor" ref={ref => setupEditor(ref, lsp)} />
-        <Errors fileName="/main.ts" />
-      </SplitPane>
-      <Logger />
-    </SplitPane>
+    <div id="editor" ref={ref => setupEditor(ref, lsp)} />
   );
 }
