@@ -299,12 +299,17 @@ tsserver upgrades data structure of the virtual file to `ScriptVersionCache` (SV
 
 ---
 
-<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+## Script version cache
 
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D1635%253A1" allowfullscreen></iframe>
 
 ---
 
-## Data structure of SVC
+<iframe class="editorFrame" src="assets/editor/dist/index.html"></iframe>
+
+---
+
+## Data structure of SVC's snapshot
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D428%253A0" allowfullscreen></iframe>
 
@@ -372,6 +377,8 @@ interface IScriptSnapshot {
 
 ### Example
 
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D1635%253A93" allowfullscreen></iframe>
+
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A59" allowfullscreen></iframe>
 
 ---
@@ -390,13 +397,25 @@ interface IScriptSnapshot {
 
 ---
 
-## 1. Make the actual change
+## 1. Get textChangeRange
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D1635%253A62" allowfullscreen></iframe>
+
+---
+
+## 1. Gets textChangeRange
+
+<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A59" allowfullscreen></iframe>
+
+---
+
+## 2. Make the actual change
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A39" allowfullscreen></iframe>
 
 ---
 
-## 2. Visit each old nodes and mark intersected
+## 3. Visit each old nodes and mark intersected
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A0" allowfullscreen></iframe>
 
