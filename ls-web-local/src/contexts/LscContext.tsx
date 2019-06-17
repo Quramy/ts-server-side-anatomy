@@ -13,6 +13,7 @@ export class LscProvider extends React.Component<Props> {
   private lsc = new LsClient({
     initialContents: [{ fileName: "/main.ts", content: this.props.config.initialContent }],
     debounceTime: this.props.config.debounceTime,
+    useComplete: this.props.config.useComplete,
   });
 
   render() {

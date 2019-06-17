@@ -13,5 +13,6 @@ export type Optional<T> = {[P in keyof T]?: T[P]};
 export type Configuration = {
   initialContent: string,
   debounceTime: number,
+  useComplete: boolean,
   showLogger: boolean,
 };

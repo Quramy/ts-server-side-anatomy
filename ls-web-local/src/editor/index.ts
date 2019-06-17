@@ -23,14 +23,14 @@ function createCompleter(langServiceSession: LanguageServiceSession) {
   };
 }
 
-export function setupEditor(element: HTMLElement | null, lspClient: LsClient) {
+export function setupEditor(element: HTMLElement | null, lsClient: LsClient) {
   if (!element) return;
 
   const editor = ace.edit(element);
   editor.setOptions({
     fontSize: "22px",
     enableBasicAutocompletion: false,
-    enableLiveAutocompletion: true,
+    enableLiveAutocompletion: lsClient.useComplete,
   });
   const editorSession = editor.getSession();
 
@@ -39,17 +39,17 @@ export function setupEditor(element: HTMLElement | null, lspClient: LsClient) {
   editorSession.setTabSize(2);
 
   const inital$ = new Subject<string>();
-  const initalContent = lspClient.languageServiceSession.getContentFromFileName("/main.ts");
+  const initalContent = lsClient.languageServiceSession.getContentFromFileName("/main.ts");
   editor.getSession().getDocument().insert({ column: 0, row: 0 }, initalContent);
   
   const changeSource$ = new Subject<Ace.Delta>();
   const logger = rootLogger.getCategory("ace");
   editor.on("change", delta => {
     logger.log("sendChange", delta);
-    lspClient.nextChange("/main.ts", delta);
+    lsClient.nextChange("/main.ts", delta);
   });
 
-  lspClient.getErrors$("/main.ts").subscribe(errors => {
+  lsClient.getErrors$("/main.ts").subscribe(errors => {
     if (errors.length) {
       logger.log("rcvError", errors);
     } else {
@@ -58,8 +58,10 @@ export function setupEditor(element: HTMLElement | null, lspClient: LsClient) {
     editorSession.setAnnotations(errors);
   });
 
-  const completer = createCompleter(lspClient.languageServiceSession);
-  langTools.addCompleter(completer);
+  if (lsClient.useComplete) {
+    const completer = createCompleter(lsClient.languageServiceSession);
+    langTools.addCompleter(completer);
+  }
 
   return editor;
 }

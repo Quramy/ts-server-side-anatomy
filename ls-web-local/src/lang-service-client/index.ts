@@ -9,12 +9,14 @@ import { pos2loc, loc2pos } from "../util";
 
 export type CreateLsClientOptions = {
   debounceTime: number,
+  useComplete: boolean,
   initialContents: { fileName: string, content: string }[],
 }
 
 export class LsClient {
 
   public readonly languageServiceSession: LanguageServiceSession;
+  public readonly useComplete: boolean;
 
   private inital$: Subject<string>;
   private change$: Subject<{ fileName: string, delta: Ace.Delta }>;
@@ -29,6 +31,7 @@ export class LsClient {
     } else {
       this.inital$ = new Subject();
     }
+    this.useComplete = options.useComplete;
   }
 
   private observeChange() {

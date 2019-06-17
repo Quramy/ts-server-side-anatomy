@@ -32,6 +32,7 @@ export class ConfigProvider extends React.Component {
     
     const initalConfig: Configuration = {
       showLogger: q.get("disabled-logger") === "true" ? false : true,
+      useComplete: q.get("disabled-completion") === "true" ? false : true,
       debounceTime: q.get("no-delay") === "true" ? 100: 1500,
       initialContent: content,
     };
