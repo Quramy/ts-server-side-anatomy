@@ -379,8 +379,6 @@ interface IScriptSnapshot {
 
 <iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D1635%253A93" allowfullscreen></iframe>
 
-<iframe style="border: none;" width="800" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FDhwRUPAASvvdlFcM0BlRYhE3%2Fts-meetup-images%3Fnode-id%3D862%253A59" allowfullscreen></iframe>
-
 ---
 
 ### AST before
@@ -425,7 +423,9 @@ interface IScriptSnapshot {
 
 ---
 
-<iframe width="968" height="598.5927678283317" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRF1eWeNCv2389PiiqCjEXzCWIhvPzkO_mv_WEwYC_gy0bX5wQQvx9RQhKzT1ypvHShpW4tmLtrQOIS/pubchart?oid=462115573&amp;format=image"></iframe>
+<iframe class="chart_small" width="481.61044176706827" height="243.1701154772515" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRF1eWeNCv2389PiiqCjEXzCWIhvPzkO_mv_WEwYC_gy0bX5wQQvx9RQhKzT1ypvHShpW4tmLtrQOIS/pubchart?oid=462115573&amp;format=image"></iframe>
+
+<iframe class="chart_big" width="1049.4099037138926" height="581.0263455092004" seamless frameborder="0" scrolling="no" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRF1eWeNCv2389PiiqCjEXzCWIhvPzkO_mv_WEwYC_gy0bX5wQQvx9RQhKzT1ypvHShpW4tmLtrQOIS/pubchart?oid=1945554416&amp;format=image"></iframe>
 
 * x-axis: The numbers of lines of original source code
 * y-axis: Time [msec] to parse for 60 times insertion

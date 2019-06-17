@@ -9,7 +9,7 @@ const styles = {
     overflow-y: scroll;
     height: 100%;
     list-style: none;
-    font-size: 1.3em;
+    font-size: 1.3rem;
   `,
   item: css`
     display: flex;

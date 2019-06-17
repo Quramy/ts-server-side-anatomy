@@ -1,3 +1,40 @@
+:root {
+  --gutter-large: 50px;
+  --fig-scale: .5;
+}
+
+body {
+  font-size: 32px;
+}
+
+@media screen and (max-width: 750px) {
+  :root {
+    --gutter-large: 20px;
+    --fig-scale: .18;
+  }
+
+  body {
+    font-size: 18px;
+  }
+
+  pre[class*='language-'],
+  code[class*='language-'] {
+    font-size: 12px;
+  }
+
+  .chart_big {
+    display: none;
+  }
+
+  img.figma_fig {
+    margin: var(--gutter-large) auto;
+  }
+}
+@media screen and (min-width: 751px) {
+  .chart_small {
+    display: none;
+  }
+}
 
 section:not(.current) iframe {
   display: none;
@@ -13,15 +50,15 @@ iframe:not(.editorFrame) {
 }
 
 section.slide > h2 + *:not([id]) {
-  margin-top: 50px;
+  margin-top: var(--gutter-large);
 }
 
 ul:not(:first-child) {
-  margin-top: 50px;
+  margin-top: var(--gutter-large);
 }
 
 ul:not(:last-child) {
-  margin-bottom: 50px;
+  margin-top: var(--gutter-large);
 }
 
 li > ul:not(:first-child) {
@@ -33,7 +70,7 @@ ul>li {
 }
 
 blockquote {
-  margin-top: 50px;
+  margin-top: var(--gutter-large);
 }
 
 blockquote p {
@@ -43,5 +80,9 @@ blockquote p {
 }
 
 img.figma_fig {
-  zoom: 0.5;
+  zoom: var(--fig-scale);
+}
+
+li, p {
+  line-height: 4rem;
 }

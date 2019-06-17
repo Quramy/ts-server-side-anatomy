@@ -9,7 +9,7 @@ const styles = {
     color: red;
     min-height: 50px;
     height: 100%;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
   `,
   list: css`

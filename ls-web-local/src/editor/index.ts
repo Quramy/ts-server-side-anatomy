@@ -28,7 +28,7 @@ export function setupEditor(element: HTMLElement | null, lsClient: LsClient) {
 
   const editor = ace.edit(element);
   editor.setOptions({
-    fontSize: "22px",
+    fontSize: "1.3rem",
     enableBasicAutocompletion: false,
     enableLiveAutocompletion: lsClient.useComplete,
   });
