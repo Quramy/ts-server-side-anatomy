@@ -10,7 +10,7 @@
 
 ---
 
-# You must have.
+# You must have
 
 ---
 
@@ -34,7 +34,7 @@
 
 ---
 
-## Functions what we want
+## Functions what we want for editor/IDEs
 
 - Error checking
 - Completion
@@ -48,7 +48,7 @@
 
 ---
 
-## No more [Editor war](https://en.wikipedia.org/wiki/Editor_war)!
+## No more [editor war](https://en.wikipedia.org/wiki/Editor_war)!
 
 ![editor_war](https://pbs.twimg.com/media/Bhfbnn3CMAA93mg.png:large)
 
@@ -65,7 +65,7 @@ TypeScript's server, a.k.a. **tsserver**, gives language functions to editor/IDE
 ## Features of tsserver
 
 * Communicates over STDIO
-  * Editor/IDEs need **no JavaScript** engine
+  * Editor/IDEs need **no JavaScript** code
 * Using JSON paylod such as JSON RPC protocol
 
 ---
@@ -214,7 +214,7 @@ Info 40   [3:43:46.519] 	Files (6)
 
 ---
 
-## Language Service & Host
+## Language service & host
 
 - Lanage Service: Analyzes TypeScript project information(errors, types, etc...)
 - Lanage Service Host: Provides file information of the project to the language service
@@ -230,7 +230,7 @@ languageService.getQuickInfoAtPosition(...);
 
 ---
 
-## Language Service Host I/F
+## LanguageServiceHost I/F
 
 ```typescript
 interface LanguageServiceHost {
@@ -250,11 +250,11 @@ interface LanguageServiceHost {
 
 ---
 
-## Language Service does not depend on Node.js's fs
+## Language service does not depend on Node.js's fs
 
 ---
 
-## Language Service run on Web browser
+## We can run it on Web browser
 
 ---
 
@@ -274,8 +274,6 @@ interface LanguageServiceHost {
 
 ---
 
-## Code is typed every moment
-
 ![cat_typing](https://media.giphy.com/media/lJNoBCvQYp7nq/giphy.gif)
 
 ---
@@ -289,9 +287,9 @@ interface LanguageServiceHost {
 
 ## 2 kinds of files watched by tsserver:
 
+* Immutable: e.g. dom.lib.d.ts or libraries' .ts files
 * **Mutable: Files you're editing**
   * The changes may not be applied on your file system
-* Immutable: e.g. dom.lib.d.ts or libraries' .ts files
 
 It means that tsserver should have not only virtual file sysytem but also the mirror of editor's buffers.  
   
@@ -358,6 +356,13 @@ interface IScriptSnapshot {
   dispose?(): void;
 }
 ```
+
+---
+
+### TextChangeRange:
+
+> This information is used by the **incremental parser** to determine  
+> what sections of the script need to be re-parsed. 
 
 ---
 

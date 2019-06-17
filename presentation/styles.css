@@ -31,3 +31,17 @@ li > ul:not(:first-child) {
 ul>li {
   line-height: 1.6;
 }
+
+blockquote {
+  margin-top: 50px;
+}
+
+blockquote p {
+  font-size: 3.8rem;
+  line-height: 5rem;
+  font-style: italic;
+}
+
+img.figma_fig {
+  zoom: 0.5;
+}

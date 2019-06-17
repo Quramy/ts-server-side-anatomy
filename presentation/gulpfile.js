@@ -33,7 +33,7 @@ function replaceIframe() {
       const nodeId = querystring.parse(fileUrl.query)["node-id"];
       const imgName = `${fileId}__${nodeId}.png`;
       images.push({ fileId, nodeId, imgName });
-      return `<img src="${imgName}">`;
+      return `<img class="figma_fig" src="${imgName}">`;
     }))
     .pipe(gulp.dest("fusuma_wd/slides"));
 }
@@ -41,7 +41,7 @@ function replaceIframe() {
 function fetch() {
   return Promise.all(images.map(async ({ imgName, nodeId, fileId }) => {
     const res = await rp({
-      url: `https://api.figma.com/v1/images/${fileId}?ids=${nodeId}&format=png`,
+      url: `https://api.figma.com/v1/images/${fileId}?ids=${nodeId}&format=png&scale=2.0`,
       headers: {
         "X-FIGMA-TOKEN": token,
       },
