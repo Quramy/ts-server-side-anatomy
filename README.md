@@ -1,6 +1,6 @@
 # TypeScript Server Side Anatomy
 
-I've created this repo to explain **what TypeScript server(tsserver) does under your editors**.
+I've created this repo to explain **what TypeScript server(tsserver) does under your editor**.
 
 - How editor/IDEs communicate with tsserver
 - File structure(Script Version Cache) in language service host
@@ -22,7 +22,7 @@ This repository, created for tsjp meetup #1, includes the following:
 
 See [ls-web-local](ls-web-local) dir.
 
-And you can live demonstration [here](https://quramy.github.io/ts-server-side-anatomy/assets/editor/dist/index.html?no-delay=true)
+And you can check live demonstration out [here](https://quramy.github.io/ts-server-side-anatomy/assets/editor/dist/index.html?no-delay=true).
 
 ## Figures
 
