@@ -1,9 +1,9 @@
 meta:
-  url:
-  name:
-  author:
-  thumbnail:
-  description:
+  url: https://quramy.github.io/ts-server-side-anatomy/
+  name: TypeScript Server Side Anatomy
+  author: Quramy
+  thumbnail: https://quramy.github.io/ts-server-side-anatomy/assets/ogp.png
+  description: Explain what TypeScript server(tsserver) does under your editors
   sns:
     - twitter
 slide:
